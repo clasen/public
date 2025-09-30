@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INDY CLUB</title>
+    <title>INDIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         html,
@@ -31,7 +31,8 @@
             height: 100%;
             background-size: cover;
             background-position: top;
-            transition: filter 0.1s linear, backdrop-filter 0.5s ease; /* Transición rápida */
+            transition: filter 0.1s linear, backdrop-filter 0.5s ease;
+            /* Transición rápida */
         }
 
         #content {
@@ -81,31 +82,62 @@
         p {
             font-size: 2em;
         }
-
     </style>
 </head>
 
 <body>
 
+    <audio id="backgroundAudio" preload="auto">
+        <source src="loop.ogg" type="audio/ogg">
+    </audio>
+
     <div id="background"></div>
     <div id="container">
         <div id="content">
-            <h1>INDY CLUB</h1>
-            <h2>Viernes 17/05</h2>
-            
-            <p>18:00h - 0:00h</p>
-            <p>Fincas - Lote 94</p>
+            <h1>INDIA</h1>
+            <h2>Sábado 08/11</h2>
+
+            <p>17:00h - 02:00h</p>
+            <p>
+                Santa Maria del Tigre<br />
+                Mz 65 Lote 45
+            </p>
         </div>
     </div>
 
     <script>
+        // Configuración de audio con loop mejorado
+        const audio = document.getElementById('backgroundAudio');
+        let audioStarted = false;
+
+        // Técnica para reducir el gap del loop
+        audio.addEventListener('timeupdate', function () {
+            // Reiniciar un poco antes del final para minimizar el gap
+            if (audio.duration - audio.currentTime < 0.05) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log('Play prevented:', e));
+            }
+        });
+
+        // Configurar loop nativo como respaldo
+        audio.loop = true;
+
+        function playAudio() {
+            if (!audioStarted) {
+                audioStarted = true;
+                audio.play().catch(e => {
+                    console.log('Autoplay prevented, click para iniciar:', e);
+                });
+            }
+        }
+
         let hue = 0;
         const background = document.getElementById('background');
         const content = document.getElementById('content');
         let contentVisible = false;
 
         function updateHue() {
-            
+
             hue = (hue + 3); // Incrementa más rápido el valor del hue
 
             if (!contentVisible) {
@@ -116,18 +148,24 @@
             }
         }
 
-        function toggleContent() {
+        function toggleContent(userInteraction = false) {
+            // Iniciar audio solo en interacciones reales del usuario
+            if (userInteraction) {
+                playAudio();
+            }
+
             contentVisible = !contentVisible;
             content.style.opacity = contentVisible ? 1 : 0;
             updateHue();
         }
 
-        // Iniciar ciclo de hue
-        setTimeout(toggleContent, 2000);
+        // Iniciar ciclo de hue (sin audio, ya que no es interacción del usuario)
+        setTimeout(() => {
+            toggleContent(false);
+        }, 2000);
         updateHue();
-        
 
-        document.body.addEventListener('click', toggleContent);
+        document.body.addEventListener('click', () => toggleContent(true));
     </script>
 
 </body>
