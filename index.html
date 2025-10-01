@@ -87,10 +87,6 @@
 
 <body>
 
-    <audio id="backgroundAudio" preload="auto">
-        <source src="https://clasen.github.io/public/loop.ogg" type="audio/ogg">
-    </audio>
-
     <div id="background"></div>
     <div id="container">
         <div id="content">
@@ -106,31 +102,6 @@
     </div>
 
     <script>
-        // Configuración de audio con loop mejorado
-        const audio = document.getElementById('backgroundAudio');
-        let audioStarted = false;
-
-        // Técnica para reducir el gap del loop
-        audio.addEventListener('timeupdate', function () {
-            // Reiniciar un poco antes del final para minimizar el gap
-            if (audio.duration - audio.currentTime < 0.05) {
-                audio.currentTime = 0;
-                audio.play().catch(e => console.log('Play prevented:', e));
-            }
-        });
-
-        // Configurar loop nativo como respaldo
-        audio.loop = true;
-
-        function playAudio() {
-            if (!audioStarted) {
-                audioStarted = true;
-                audio.play().catch(e => {
-                    console.log('Autoplay prevented, click para iniciar:', e);
-                });
-            }
-        }
-
         let hue = 0;
         const background = document.getElementById('background');
         const content = document.getElementById('content');
